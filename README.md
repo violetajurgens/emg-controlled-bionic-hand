@@ -8,6 +8,6 @@ The hand is 3D printed and uses a tendon-driven actuation mechanism with passive
 
 ## Required circuit components
 
-* **2× ExG Pill by Upside Down Labs**. Instrumentation amplifiers with custom high-pass and low-pass filters and gain settings designed specifically for measuring small electrical signals from the body, such as EMG, ECG, and EEG.
+* **2× ExG Pill by Upside Down Labs**. Instrumentation amplifiers with custom RC filters and gain settings designed specifically for measuring small electrical signals from the body, such as EMG, ECG, and EEG.
 
 * **2× Arduino/Raspberry Pi boards with 2x USB cable**. One board is used for EMG signal acquisition and transmission to the computer. The second board receives movement commands from MATLAB and controls the servo.
