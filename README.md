@@ -1,5 +1,3 @@
-## Overview
-
 This repository contains MATLAB code for EMG signal analysis and servo control of a bionic hand using two antagonistic forearm muscle signals: a **flexor** and an **extensor**. The processed EMG envelopes are compared with calibrated activation thresholds to classify four muscle states: flexor activation, extensor activation, rest, and co-contraction. Flexor activation commands the hand to close, while extensor activation commands it to open. During rest or co-contraction, no new movement command is issued and the servo maintains its current position. This allows the hand to remain open, closed, or partially closed without requiring continuous muscle contraction.
 
 ## Actuation mechanism
