@@ -10,9 +10,17 @@ This repository contains MATLAB code for EMG signal analysis and servo control o
 
 The hand is 3D printed and uses a tendon-driven actuation mechanism with passive elastic return. Finger flexion is produced by a high-torque servo connected to artificial tendons running along the palm side of the fingers. When a closing command is received, the servo winds the tendons around a spool, shortening them and pulling the fingers into flexion. Finger extension is passive. Elastic cords run along the dorsal side of the fingers and are stretched when the hand closes. When an opening command is received, the servo unwinds the flexion tendons, increasing their available length. The elastic cords then pull the fingers back into the extended position. Mechanical stops incorporated into the dorsal side of the finger joints prevent the fingers from extending beyond their intended straight position. Both the flexion tendons and elastic return cords are routed through holes that are incorporated into the 3d model so that the elastic and the wire will run straight. The hole in the labakäsi part of the 3D model that holds the servo can be modified for your servo size, I used FT3625M.
 
-## Signal acquisition from ExG Pill
+**Signal acquisition from ExG Pill**
+First Arduino chords Firmware is uploaded to one of the boards so that arduino knows how to send info so that LSL chords connector would understand (https://github.com/upsidedownlabs/Chords-Arduino-Firmware). MatLab will read the LSL sognal from LSL Chords connectro (Upside Down Labs software) directly. Additionally, if you want to analyze saved LSL streams (.xdf) then you need to download a repository for XDF fiule readinf in MATLAB.
 
-First Arduino chords Firmware is uploaded to one of the boards so that arduino knows how to send info so that LSL chords connector would understand (https://github.com/upsidedownlabs/Chords-Arduino-Firmware). MatLab will read the LSL sognal from LSL Chords connectro (Upside Down Labs software) directly.
+**Classifier algorithm**
+You need statistics and machine learning toolbox.
+We are making a decision to close or open the hand by deciding whether the extensor or flexor has noticeably larger signal than another. But the raw signal we get from ExG pill about muscle activity, it is jumping around in negative and positive voltages around 0, see below on graph A so the two signals are incomparable if lets say one of them is -33mV and other is 3mV but the first has much larger amplitude. This is why we calculate the mean absolute value (MAV) over a short moving window:
+<img width="164" height="59" alt="image" src="https://github.com/user-attachments/assets/d861b93b-d4f7-423e-aa39-5d4fd1238371" />
+Below on graph B you can see the MAV values for.
+
+We also set the flex treshold to detect activity of muscle as important and we set the difference threshold meaning that the computer will only use this info when its important. But since different people will have different muscle activity strength, or the electrodes can be attached weakly or other reason, each time we must do calibration. We measure maximal and minimal flexions for both muscles flexNorm = (flexMAV - flexRest) / (flexMax - flexRest);
+extNorm  = (extMAV  - extRest)  / (extMax  - extRest). And then we later normalize everything to these valyues like this.
 
 ## Control of the servo
 
