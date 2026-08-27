@@ -22,6 +22,17 @@ Below on graph B you can see the MAV values for.
 We also set the flex treshold to detect activity of muscle as important and we set the difference threshold meaning that the computer will only use this info when its important. But since different people will have different muscle activity strength, or the electrodes can be attached weakly or other reason, each time we must do calibration. We measure maximal and minimal flexions for both muscles flexNorm = (flexMAV - flexRest) / (flexMax - flexRest);
 extNorm  = (extMAV  - extRest)  / (extMax  - extRest). And then we later normalize everything to these valyues like this.
 
+**Electrode placement**
+It is very important to place the electrodes correctly and they need to have good contact with skin. If you place the electrodes incorrectly the result might be similar to graph A. As you can see on graph A, the fist (3 first peaks) and straigth (3 last peaks) are not distinguishable because both extensor and flexor signals from channels 1 and 2 go higher for both movements. This happens when electrodes are placed on wrong muscle groups.
+<img width="545" height="350" alt="bad example" src="https://github.com/user-attachments/assets/7376d5d7-b5c6-4446-90e7-46277d121c3a" />
+However, what a good signal should look like is seen in graph B. Her you can really distinguish between borth movements because one sort of movement has channel 1 flying without channel 2 but other type is other channel higher. The blue channel here is flexor muscles and red channel is extensor muscles. Dominant extensor has been marked with "E" and dominant flexor is marked with "F". Experimenting with electrode plavement can really help with getting a clear signal that is easy to train classifier model with.
+<img width="553" height="346" alt="Screenshot 2026-08-27 181550" src="https://github.com/user-attachments/assets/cbe7b4e7-f698-4423-81f9-73841e763049" />
+The placement i find the best is below. Two signal electrodes could be placed at "6" and "7" for flexor muscles (flexor digitorum profundus & palmaris longus; flexor digitorum profundus & flexor carpi radialis) and "1" and "3" for extensor muscles (extensor carpi ulnaris; extensor digitorum). Thanks and picture to Simar et al. (2024).
+<img width="1170" height="509" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
+
 ## Control of the servo
 
 Servo was controlled through MatLab using MATLAB Support for Arduino hardware package with Servo library enabled.
+
+**References**
+Simar, C., Colot, M., Cebolla, A.-M., Petieau, M., Cheron, G., and Bontempi, G. (2024). Machine learning for hand pose classification from phasic and tonic EMG signals during bimanual activities in virtual reality. Front. Neurosci. 18:1329411. doi: 10.3389/fnins.2024.1329411
