@@ -22,7 +22,7 @@ Below on graph B you can see the MAV values for.
 We also set the flex treshold to detect activity of muscle as important and we set the difference threshold meaning that the computer will only use this info when its important. But since different people will have different muscle activity strength, or the electrodes can be attached weakly or other reason, each time we must do calibration. We measure maximal and minimal flexions for both muscles flexNorm = (flexMAV - flexRest) / (flexMax - flexRest);
 extNorm  = (extMAV  - extRest)  / (extMax  - extRest). And then we later normalize everything to these valyues like this.
 
-**Electrode placement**
+## Electrode placement
 Correct electrode placement is very important for obtaining clear EMG signals. The electrodes should also have good, consistent contact with the skin. If the electrodes are placed over unsuitable muscle locations, the recorded signals may look similar to Graph A. In this example, the first three peaks correspond to making a fist, while the last three correspond to opening the hand. The two movements are difficult to distinguish because both Channel 1 and Channel 2 increase during both movements. This makes classification difficult because there is no clear difference in the activation pattern between the flexor and extensor channels.
 
 <img width="545" height="350" alt="bad example" src="https://github.com/user-attachments/assets/7376d5d7-b5c6-4446-90e7-46277d121c3a" />
