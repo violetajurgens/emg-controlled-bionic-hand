@@ -25,13 +25,9 @@ extNorm  = (extMAV  - extRest)  / (extMax  - extRest). And then we later normali
 ## Electrode placement
 Correct electrode placement is very important for obtaining clear EMG signals. The electrodes should also have good, consistent contact with the skin. If the electrodes are placed over unsuitable muscle locations, the recorded signals may look similar to Graph A. In this example, the first three peaks correspond to making a fist, while the last three correspond to opening the hand. The two movements are difficult to distinguish because both Channel 1 and Channel 2 increase during both movements. This makes classification difficult because there is no clear difference in the activation pattern between the flexor and extensor channels.
 
-<img width="272.5" height="175" alt="bad example" src="https://github.com/user-attachments/assets/7376d5d7-b5c6-4446-90e7-46277d121c3a" />
+<img width="272.5" height="175" alt="bad example" src="https://github.com/user-attachments/assets/7376d5d7-b5c6-4446-90e7-46277d121c3a" /> <img width="276.5" height="173" alt="Screenshot 2026-08-27 181550" src="https://github.com/user-attachments/assets/cbe7b4e7-f698-4423-81f9-73841e763049" />
 
-A better signal is shown in Graph B. Here, the two movements are much easier to distinguish because one channel becomes dominant during flexion, while the other becomes dominant during extension. In this example, the blue channel represents the flexor muscles and the red channel represents the extensor muscles. Dominant flexor activity is marked with "F", while dominant extensor activity is marked with "E". Experimenting with electrode placement can therefore make a major difference.
-
-<img width="553" height="346" alt="Screenshot 2026-08-27 181550" src="https://github.com/user-attachments/assets/cbe7b4e7-f698-4423-81f9-73841e763049" />
-
-The electrode locations that I found to work best are shown below. Based on the reference locations in the figure, the two signal electrodes for the **flexor channel** can be placed around positions **6** and **7**, while the electrodes for the **extensor channel** can be placed around positions **1** and **3**.
+A better signal is shown in Graph B. Here, the two movements are much easier to distinguish because one channel becomes dominant during flexion, while the other becomes dominant during extension. In this example, the blue channel represents the flexor muscles and the red channel represents the extensor muscles. Dominant flexor activity is marked with "F", while dominant extensor activity is marked with "E". Experimenting with electrode placement can therefore make a major difference. The electrode locations that I found to work best are shown below. Based on the reference locations in the figure, the two signal electrodes for the **flexor channel** can be placed around positions **6** and **7**, while the electrodes for the **extensor channel** can be placed around positions **1** and **3**.
 
 <img width="1170" height="509" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
 
