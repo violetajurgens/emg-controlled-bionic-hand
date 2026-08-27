@@ -29,7 +29,7 @@ Correct electrode placement is very important for obtaining clear EMG signals. T
 
 A better signal is shown in Graph B. Here, the two movements are much easier to distinguish because one channel becomes dominant during flexion, while the other becomes dominant during extension. In this example, the blue channel represents the flexor muscles and the red channel represents the extensor muscles. Dominant flexor activity is marked with "F", while dominant extensor activity is marked with "E". Experimenting with electrode placement can make a major difference. The electrode locations that I found to work best are shown below. Based on the reference locations in the figure, the two signal electrodes for the flexor channel can be placed around positions 6 and 7, while the electrodes for the extensor channel can be placed around positions 1 and 3. The figure below is adapted from Simar et al. (2024).
 
-<img width="700" height="320" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
+<img width="600" height="280" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
 
 ## Control of the servo
 
