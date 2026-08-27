@@ -16,7 +16,7 @@ First Arduino chords Firmware is uploaded to one of the boards so that arduino k
 **Classifier algorithm**
 You need statistics and machine learning toolbox.
 We are making a decision to close or open the hand by deciding whether the extensor or flexor has noticeably larger signal than another. But the raw signal we get from ExG pill about muscle activity, it is jumping around in negative and positive voltages around 0, see below on graph A so the two signals are incomparable if lets say one of them is -33mV and other is 3mV but the first has much larger amplitude. This is why we calculate the mean absolute value (MAV) over a short moving window:
-<img width="164" height="59" alt="image" src="https://github.com/user-attachments/assets/d861b93b-d4f7-423e-aa39-5d4fd1238371" />
+<img width="123" height="44.25" alt="image" src="https://github.com/user-attachments/assets/d861b93b-d4f7-423e-aa39-5d4fd1238371" />
 Below on graph B you can see the MAV values for.
 
 We also set the flex treshold to detect activity of muscle as important and we set the difference threshold meaning that the computer will only use this info when its important. But since different people will have different muscle activity strength, or the electrodes can be attached weakly or other reason, each time we must do calibration. We measure maximal and minimal flexions for both muscles flexNorm = (flexMAV - flexRest) / (flexMax - flexRest);
