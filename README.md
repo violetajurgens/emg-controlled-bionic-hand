@@ -23,7 +23,7 @@ We also set the flex treshold to detect activity of muscle as important and we s
 extNorm  = (extMAV  - extRest)  / (extMax  - extRest). And then we later normalize everything to these valyues like this.
 
 ## Electrode placement
-Correct electrode placement is very important for obtaining clear EMG signals. The electrodes should also have good, consistent contact with the skin. If the electrodes are placed over unsuitable muscle locations, the recorded signals may look similar to Graph A. In this example, the first three peaks correspond to making a fist, while the last three correspond to opening the hand. The two movements are difficult to distinguish because both Channel 1 and Channel 2 increase during both movements. This makes classification difficult because there is no clear difference in the activation pattern between the flexor and extensor channels. 
+Correct electrode placement is very important for obtaining clear EMG signals. If the electrodes are placed over unsuitable muscle locations, the recorded signals may look similar to Graph A. In this example, the first three peaks correspond to making a fist, while the last three correspond to opening the hand. The two movements are difficult to distinguish because both Channel 1 and Channel 2 increase during both movements. This makes classification difficult because there is no clear difference in the activation pattern between the flexor and extensor channels. 
 
 <img width="350" height="210" alt="bad example" src="https://github.com/user-attachments/assets/7376d5d7-b5c6-4446-90e7-46277d121c3a" /> <img width="350" height="210" alt="Screenshot 2026-08-28 021311" src="https://github.com/user-attachments/assets/09597519-d71a-40c9-bb74-d64a0b2e5f46" />
 
