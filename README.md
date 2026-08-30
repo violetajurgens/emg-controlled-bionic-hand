@@ -28,9 +28,9 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 EMG signals can vary significantly depending on electrode placement, skin contact, signal quality, and the strength of the muscle contraction. Because of this, fixed signal thresholds would not work reliably between different electrode placements or recording sessions. Therefore, the classifier is first calibrated and trained using the current EMG session before it is used for real-time hand control.
 
-During calibration, the user selects representative periods of rest, flexion, and extension from the recorded EMG signal. These selected periods are then divided into equal-length analysis windows, with each window containing a specified number of samples. This means that the classifier does not make a decision based on a single sample; each prediction is based on the behaviour of both EMG channels over a short period of time. For every analysis window, the program extracts three features from each channel.
+During calibration, the user selects representative periods of rest, flexion, and extension from the recorded EMG signal. These selected periods are then divided into equal-length analysis windows, with each window containing a specified number of samples. This means that the classifier does not make a decision based on a single sample; each prediction is based on the behaviour of both EMG channels over a short period of time. 
 
-Extracted EMG features:
+For every analysis window, the program extracts three features from each channel:
 
 * Mean Absolute Value (MAV) — the average of the absolute EMG amplitudes inside the window. It therefore provides a simple measure of the overall amplitude of the signal. Taking the absolute value is important because EMG contains both positive and negative values, which would otherwise partially cancel each other out when averaged.
   
