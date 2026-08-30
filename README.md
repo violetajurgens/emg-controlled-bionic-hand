@@ -1,13 +1,16 @@
 This repository contains MATLAB code for EMG signal analysis and servo control of a bionic hand using two antagonistic forearm muscle signals: a flexor and an extensor. The processed EMG envelopes are compared with calibrated activation thresholds to classify four muscle states: flexor activation, extensor activation, rest, and co-contraction. Flexor activation commands the hand to close, while extensor activation commands it to open. Rest is detected when both the flexor and extensor EMG envelopes remain below their respective activation thresholds, indicating that neither muscle is intentionally activated. Co-contraction is detected when both envelopes exceed their thresholds simultaneously, indicating concurrent activation of the antagonistic muscles. In both cases, MATLAB issues no new movement command to the servo, so the servo remains at its previously commanded position. The hand therefore stays in whatever position it had already reached until a new isolated flexor or extensor activation is detected.
 
-## Important components
+## Important components and software
 
-* **2× ExG Pill by Upside Down Labs**. Instrumentation amplifiers with custom RC filters and gain settings designed specifically for measuring small electrical signals from the body, such as EMG, ECG, and EEG. One ExG pill is to read flexor signal and the other one to read extensor signal.
+* **2× ExG Pill by Upside Down Labs**. These are instrumentation amplifiers with custom RC filters and gain settings designed for measuring small electrical signals from the body, such as EMG, ECG, and EEG. In this project, one ExG Pill measures the flexor muscle signal and the other measures the extensor muscle signal.
 
-* **2× Arduino/Raspberry Pi boards**. One board is used for EMG signal acquisition and transmission to the computer. The second board receives movement commands from MATLAB and controls the servo.
+* **2× Arduino/Raspberry Pi boards**. One board is used for EMG signal acquisition and transmission to the computer. The second board receives movement commands from MATLAB and controls the servo motor of the bionic hand.
 
-**Signal acquisition from ExG Pill**
-First Arduino chords Firmware is uploaded to one of the boards so that arduino knows how to send info so that LSL chords connector would understand (https://github.com/upsidedownlabs/Chords-Arduino-Firmware). MatLab will read the LSL sognal from LSL Chords connectro (Upside Down Labs software) directly. Additionally, if you want to analyze saved LSL streams (.xdf) then you need to download a repository for XDF fiule readinf in MATLAB.
+* **Chords Arduino Firmware**. When using the ExG Pills, the first step is to upload the Chords Arduino Firmware (https://github.com/upsidedownlabs/Chords-Arduino-Firmware) to the board responsible for EMG acquisition. The board then can send the measured EMG data to the computer in binary packets.
+
+* **Chords LSL Connector**. Using the Chords LSL Connector (https://github.com/upsidedownlabs/Chords-LSL-Connector), the data from the binary packets is made available as a Lab Streaming Layer (LSL) stream, which MATLAB can read in real time or which can be recorded in XDF format for later analysis.
+
+* **LabRecorder**. This application (https://github.com/labstreaminglayer/App-LabRecorder) is used to record the LSL stream and save it as an XDF file. In this project, the recorded XDF files are used by the classifier calibration program to select examples of rest, flexion, and extension and train the EMG classifier.
 
 **Classifier algorithm**
 You need statistics and machine learning toolbox.
@@ -19,6 +22,7 @@ We also set the flex treshold to detect activity of muscle as important and we s
 extNorm  = (extMAV  - extRest)  / (extMax  - extRest). And then we later normalize everything to these valyues like this.
 
 ## Electrode placement
+
 Correct electrode placement is very important for obtaining clear EMG signals. If the electrodes are placed over unsuitable muscle locations, the recorded signals may look similar to Graph A. In this example, the first three peaks correspond to making a fist, while the last three correspond to opening the hand. The two movements are difficult to distinguish because both Channel 1 and Channel 2 increase during both movements. This makes classification difficult because there is no clear difference in the activation pattern between the flexor and extensor channels. 
 
 <img width="350" height="210" alt="bad example" src="https://github.com/user-attachments/assets/7376d5d7-b5c6-4446-90e7-46277d121c3a" /> <img width="350" height="210" alt="Screenshot 2026-08-28 021311" src="https://github.com/user-attachments/assets/09597519-d71a-40c9-bb74-d64a0b2e5f46" />
@@ -31,7 +35,9 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 ## Classifier model calibration
 
-Because each electrode placement, muscle contraction strength at times or electrode connection quality and signal quality varies, the classifier model that say wheteher something is rest or extend close needs to be calibrated. 
+EMG signals can vary significantly depending on electrode placement, skin contact, signal quality, and the strength of the muscle contraction. Because of this, the classifier cannot rely on fixed EMG values to determine whether the user is resting, flexing, or extending the forearm. The classifier therefore needs to be calibrated for the current electrode placement and recording conditions before it is used to control the hand.
+
+During calibration, an XDF recording containing flexion, extension, and rest is selected. Three separate intervals of each movement are marked from the recording. The EMG data from both channels is first corrected for baseline drift and then divided into overlapping 100 ms analysis windows. For every window, six features are calculated: MAV, RMS, and waveform length for each of the two EMG channels. These features describe the strength and variation of the muscle activity and are used by the classifier.
 
 ## Bionic hand mechanical design and operation
 
