@@ -31,7 +31,7 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 ## Classifier model calibration
 
-Because each electrode placement, muscle 
+Because each electrode placement, muscle contraction strength at times or electrode connection quality and signal quality varies, the classifier model that say wheteher something is rest or extend close needs to be calibrated. 
 
 ## Bionic hand mechanical design and operation
 
