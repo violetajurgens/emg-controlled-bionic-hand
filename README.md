@@ -35,7 +35,7 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 ## 3D printed bionic hand work mechanism
 
-<img width="280" height="210" alt="1000054531" src="https://github.com/user-attachments/assets/332d310a-e456-47c6-a30b-ffb733829a9b" /> <img width="280" height="210" alt="1000054527" src="https://github.com/user-attachments/assets/7ced2d2f-78b6-4478-91eb-ea1fe7070eaf" />
+<img width="280" height="210" alt="unnamed (1)" src="https://github.com/user-attachments/assets/b0a22597-66d2-486d-8baa-368a48c24190" /> <img width="280" height="210" alt="1000054527" src="https://github.com/user-attachments/assets/7ced2d2f-78b6-4478-91eb-ea1fe7070eaf" />
 
 
 
