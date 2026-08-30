@@ -28,7 +28,9 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 EMG signals can vary significantly depending on electrode placement, skin contact, signal quality, and the strength of the muscle contraction. Because of this, fixed signal thresholds would not work reliably between different electrode placements or recording sessions. Therefore, the classifier is first calibrated and trained using the current EMG session before it is used for real-time hand control.
 
-During calibration, the user selects representative periods of rest, flexion, and extension from the recorded EMG signal. These selected periods are then divided into equal-length analysis windows, with each window containing a specified number of samples. This means that the classifier does not make a decision based on a single sample; each prediction is based on the behaviour of both EMG channels over a short period of time. For every analysis window, the program extracts three features from each channel: Mean Absolute Value (MAV), Root Mean Square (RMS), and Waveform Length (WL). Since two EMG channels are used, each window is represented by six feature values in total.
+During calibration, the user selects representative periods of rest, flexion, and extension from the recorded EMG signal. These selected periods are then divided into equal-length analysis windows, with each window containing a specified number of samples. This means that the classifier does not make a decision based on a single sample; each prediction is based on the behaviour of both EMG channels over a short period of time. For every analysis window, the program extracts three features from each channel.
+
+Extracted EMG features:
 
 * Mean Absolute Value (MAV) — the average of the absolute EMG amplitudes inside the window. It therefore provides a simple measure of the overall amplitude of the signal. Taking the absolute value is important because EMG contains both positive and negative values, which would otherwise partially cancel each other out when averaged.
   
@@ -44,7 +46,7 @@ Classification is then performed in two stages:
 
 2. **Linear Discriminant Analysis (LDA)** — distinguishes between **FLEXION** and **EXTENSION** using the six extracted features: MAV, RMS, and WL from both channels. Before training, these features are standardized so that differences in numerical scale do not influence the classifier. Unlike more complex machine-learning methods, LDA does not require a very large training dataset, making it suitable for a short calibration procedure.
 
-To evaluate the calibration, leave-one-repetition-out cross-validation is used. After classification, a 2-out-of-3 voting system reduces the effect of occasional incorrect predictions: at least two of the three most recent predictions must agree on FLEXION or EXTENSION before a CLOSE or OPEN command is produced; otherwise, the command remains HOLD. If the required accuracy is reached, the trained classifier and its calibration parameters are saved in bionic_hand_classifier.mat for use by the real-time control program.
+To evaluate the calibration, leave-one-repetition-out cross-validation is used. After classification, a 2-out-of-3 voting system reduces the effect of occasional incorrect predictions: at least two of the three most recent predictions must agree on FLEXION or EXTENSION before a CLOSE or OPEN command is produced; otherwise, the command remains HOLD. If the required accuracy is reached, the trained classifier and its calibration parameters are saved in bionic_hand_classifier.mat. 
 
 ## Bionic hand mechanical design and operation
 
