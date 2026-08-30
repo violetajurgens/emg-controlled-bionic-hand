@@ -40,10 +40,9 @@ The classifier works with three possible states: REST, FLEXION, and EXTENSION. R
 
 Classification is then performed in two stages:
 
-1. **Activity Gate** — decides whether the user is resting or actively contracting the muscles.  
-   The MAV values from both EMG channels are added together and compared with a threshold found during calibration. If the activity is below the threshold, the signal is classified as **REST**. If it is above the threshold, it is passed to the second stage.
+1. **Activity Gate** — decides whether the user is resting or actively contracting the muscles. The MAV values from both EMG channels are added together and compared with a threshold found during calibration. If the activity is below the threshold, the signal is classified as **REST**. If it is above the threshold, it is passed to the second stage.
 
-2. **Linear Discriminant Analysis (LDA)** — distinguishes between **FLEXION** and **EXTENSION** using the six extracted features: MAV, RMS, and WL from both channels. Before training, these features are standardized so that differences in numerical scale do not influence the classifier.
+2. **Linear Discriminant Analysis (LDA)** — distinguishes between **FLEXION** and **EXTENSION** using the six extracted features: MAV, RMS, and WL from both channels. Before training, these features are standardized so that differences in numerical scale do not influence the classifier. Unlike more complex machine-learning methods, LDA does not require a very large training dataset, making it suitable for a short calibration procedure.
 
 To evaluate the calibration, leave-one-repetition-out cross-validation is used. After classification, a 2-out-of-3 voting system reduces the effect of occasional incorrect predictions: at least two of the three most recent predictions must agree on FLEXION or EXTENSION before a CLOSE or OPEN command is produced; otherwise, the command remains HOLD. If the required accuracy is reached, the trained classifier and its calibration parameters are saved in bionic_hand_classifier.mat for use by the real-time control program.
 
