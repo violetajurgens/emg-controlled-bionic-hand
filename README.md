@@ -31,15 +31,20 @@ EMG signals can vary significantly depending on electrode placement, skin contac
 During calibration, the user selects representative periods of rest, flexion, and extension from the recorded EMG signal. These selected periods are then divided into equal-length analysis windows, with each window containing a specified number of samples. This means that the classifier does not make a decision based on a single sample; each prediction is based on the behaviour of both EMG channels over a short period of time. For every analysis window, the program extracts three features from each channel: Mean Absolute Value (MAV), Root Mean Square (RMS), and Waveform Length (WL). Since two EMG channels are used, each window is represented by six feature values in total.
 
 * **Mean Absolute Value (MAV)** is the average of the absolute EMG amplitudes inside the window. It therefore provides a simple measure of the overall amplitude of the signal. Taking the absolute value is important because EMG contains both positive and negative values, which would otherwise partially cancel each other out when averaged.
+  
 * **Root Mean Square (RMS)** is calculated by squaring each EMG sample, averaging the squared values, and then taking the square root. It is similar to MAV because it also shows the strength of muscle activity, but it is more sensitive to large peaks in the EMG signal.
+  
 * **Waveform Length (WL)** is calculated by adding together the absolute differences between consecutive EMG samples in the window. It describes how much the signal changes over time. This is useful because it adds information about the shape and variability of the EMG signal, rather than only its amplitude.
 
-The classifier works with three possible states: REST, FLEXION, and EXTENSION. REST means that neither muscle group is intentionally contracting, FLEXION corresponds to closing the hand, and EXTENSION corresponds to opening it. In the final control system, these states are translated into the commands HOLD, CLOSE, and OPEN.
+The classifier works with three possible states: REST, FLEXION, and EXTENSION. REST means that neither muscle group is intentionally contracting, FLEXION corresponds to closing the hand, and EXTENSION corresponds to opening it. In the final control system, these states are translated into the commands HOLD, CLOSE, and OPEN. 
 
 Classification is then performed in two stages:
 
-1.   **Activity Gate** decides whether the user is resting or actively contracting the muscles. The MAV values from both EMG channels are added together and compared with a threshold found during calibration. If the activity is below the threshold, the signal is classified as REST. If it is above the threshold, it is passed to the second stage.
-2.   **Linear Discriminant Analysis (LDA)** distinguishes between FLEXION and EXTENSION using the six extracted features: MAV, RMS, and WL from both channels. Before training, these features are standardised so that differences in numerical scale do not influence the classifier.
+1. **Activity Gate** — decides whether the user is resting or actively contracting the muscles.  
+   The MAV values from both EMG channels are added together and compared with a threshold found during calibration. If the activity is below the threshold, the signal is classified as **REST**. If it is above the threshold, it is passed to the second stage.
+
+2. **Linear Discriminant Analysis (LDA)** — distinguishes between **FLEXION** and **EXTENSION** using the six extracted features: MAV, RMS, and WL from both channels.  
+   Before training, these features are standardized so that differences in numerical scale do not influence the classifier.
 
 To evaluate the calibration, leave-one-repetition-out cross-validation is used. After classification, a 2-out-of-3 voting system reduces the effect of occasional incorrect predictions: at least two of the three most recent predictions must agree on FLEXION or EXTENSION before a CLOSE or OPEN command is produced; otherwise, the command remains HOLD. If the required accuracy is reached, the trained classifier and its calibration parameters are saved in bionic_hand_classifier.mat for use by the real-time control program.
 
