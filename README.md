@@ -46,7 +46,7 @@ Classification is then performed in two stages:
 
 2. **Linear Discriminant Analysis (LDA)** — distinguishes between **FLEXION** and **EXTENSION** using the six extracted features: MAV, RMS, and WL from both channels. Before training, these features are standardized so that differences in numerical scale do not influence the classifier. Unlike more complex machine-learning methods, LDA does not require a very large training dataset, making it suitable for a short calibration procedure.
 
-To evaluate the calibration, leave-one-repetition-out cross-validation is used. After classification, a 2-out-of-3 voting system reduces the effect of occasional incorrect predictions: at least two of the three most recent predictions must agree on FLEXION or EXTENSION before a CLOSE or OPEN command is produced; otherwise, the command remains HOLD. If the required accuracy is reached, the trained classifier and its calibration parameters are saved in bionic_hand_classifier.mat. 
+To evaluate the calibration, leave-one-repetition-out cross-validation is used. After classification, a 2-out-of-3 voting system reduces the effect of occasional incorrect predictions: at least two of the three most recent predictions must agree on FLEXION or EXTENSION before a CLOSE or OPEN command is produced; otherwise, the command remains HOLD. If the required accuracy is reached, the trained classifier and its calibration parameters are saved. 
 
 ## Bionic hand mechanical design and operation
 
