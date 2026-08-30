@@ -1,6 +1,6 @@
 This repository contains MATLAB code for EMG signal analysis and servo control of a bionic hand using two antagonistic forearm muscle signals: a flexor and an extensor. The processed EMG envelopes are compared with calibrated activation thresholds to classify four muscle states: flexor activation, extensor activation, rest, and co-contraction. Flexor activation commands the hand to close, while extensor activation commands it to open. Rest is detected when both the flexor and extensor EMG envelopes remain below their respective activation thresholds, indicating that neither muscle is intentionally activated. Co-contraction is detected when both envelopes exceed their thresholds simultaneously, indicating concurrent activation of the antagonistic muscles. In both cases, MATLAB issues no new movement command to the servo, so the servo remains at its previously commanded position. The hand therefore stays in whatever position it had already reached until a new isolated flexor or extensor activation is detected.
 
-## Important components and software
+## Required components and downloads
 
 * **2× ExG Pill by Upside Down Labs**. These are instrumentation amplifiers with custom RC filters and gain settings designed for measuring small electrical signals from the body, such as EMG, ECG, and EEG. In this project, one ExG Pill measures the flexor muscle signal and the other measures the extensor muscle signal.
 
