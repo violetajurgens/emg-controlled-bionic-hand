@@ -24,7 +24,7 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 <img width="600" height="280" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
 
-## Classifier model and its calibration and training
+## Classifier and its calibration and training
 
 EMG signals can vary significantly depending on electrode placement, skin contact, signal quality, and the strength of the muscle contraction. Because of this, fixed signal thresholds would not work reliably between different electrode placements or recording sessions. Therefore, the classifier is first calibrated and trained using the current EMG session before it is used for real-time hand control.
 
