@@ -33,6 +33,12 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 <img width="600" height="280" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
 
+## 3D printed bionic hand work mechanism
+
+<img width="300" height="400" alt="1000054531" src="https://github.com/user-attachments/assets/332d310a-e456-47c6-a30b-ffb733829a9b" /> <img width="300" height="400" alt="1000054527" src="https://github.com/user-attachments/assets/7ced2d2f-78b6-4478-91eb-ea1fe7070eaf" />
+
+
+
 ## Control of the servo
 
 Servo was controlled through MatLab using MATLAB Support for Arduino hardware package with Servo library enabled.
