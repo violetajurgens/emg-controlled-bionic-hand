@@ -1,25 +1,16 @@
-This repository contains MATLAB code for EMG signal analysis and servo control of a bionic hand using two antagonistic forearm muscle signals: a flexor and an extensor. The processed EMG envelopes are compared with calibrated activation thresholds to classify four muscle states: flexor activation, extensor activation, rest, and co-contraction. Flexor activation commands the hand to close, while extensor activation commands it to open. Rest is detected when both the flexor and extensor EMG envelopes remain below their respective activation thresholds, indicating that neither muscle is intentionally activated. Co-contraction is detected when both envelopes exceed their thresholds simultaneously, indicating concurrent activation of the antagonistic muscles. In both cases, MATLAB issues no new movement command to the servo, so the servo remains at its previously commanded position. The hand therefore stays in whatever position it had already reached until a new isolated flexor or extensor activation is detected.
+
 
 ## Required components and downloads
 
 * **2× ExG Pill by Upside Down Labs**. These are instrumentation amplifiers with custom RC filters and gain settings designed for measuring small electrical signals from the body, such as EMG, ECG, and EEG. In this project, one ExG Pill measures the flexor muscle signal and the other measures the extensor muscle signal.
 
-* **2× Arduino/Raspberry Pi boards**. One board is used for EMG signal acquisition and transmission to the computer. The second board receives movement commands from MATLAB and controls the servo motor of the bionic hand.
+* **2× Arduino/Raspberry Pi (etc.) boards**. One board is used for EMG signal acquisition and transmission to the computer. The second board receives movement commands from MATLAB and controls the servo motor of the bionic hand.
 
 * **Chords Arduino Firmware**. When using the ExG Pills, the first step is to upload the Chords Arduino Firmware (https://github.com/upsidedownlabs/Chords-Arduino-Firmware) to the board responsible for EMG acquisition. The board then can send the measured EMG data to the computer in binary packets.
 
 * **Chords LSL Connector**. Using the Chords LSL Connector (https://github.com/upsidedownlabs/Chords-LSL-Connector), the data from the binary packets is made available as a Lab Streaming Layer (LSL) stream, which MATLAB can read in real time or which can be recorded in XDF format for later analysis.
 
 * **LabRecorder**. This application (https://github.com/labstreaminglayer/App-LabRecorder) is used to record the LSL stream and save it as an XDF file. In this project, the recorded XDF files are used by the classifier calibration program to select examples of rest, flexion, and extension and train the EMG classifier.
-
-**Classifier algorithm**
-You need statistics and machine learning toolbox.
-We are making a decision to close or open the hand by deciding whether the extensor or flexor has noticeably larger signal than another. But the raw signal we get from ExG pill about muscle activity, it is jumping around in negative and positive voltages around 0, see below on graph A so the two signals are incomparable if lets say one of them is -33mV and other is 3mV but the first has much larger amplitude. This is why we calculate the mean absolute value (MAV) over a short moving window:
-<img width="123" height="44.25" alt="image" src="https://github.com/user-attachments/assets/d861b93b-d4f7-423e-aa39-5d4fd1238371" />
-Below on graph B you can see the MAV values for.
-
-We also set the flex treshold to detect activity of muscle as important and we set the difference threshold meaning that the computer will only use this info when its important. But since different people will have different muscle activity strength, or the electrodes can be attached weakly or other reason, each time we must do calibration. We measure maximal and minimal flexions for both muscles flexNorm = (flexMAV - flexRest) / (flexMax - flexRest);
-extNorm  = (extMAV  - extRest)  / (extMax  - extRest). And then we later normalize everything to these valyues like this.
 
 ## Electrode placement
 
@@ -33,11 +24,23 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 <img width="600" height="280" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
 
-## Classifier model calibration
+## Classifier model and its calibration and training
 
-EMG signals can vary significantly depending on electrode placement, skin contact, signal quality, and the strength of the muscle contraction. Because of this, the classifier cannot rely on fixed EMG values to determine whether the user is resting, flexing, or extending the forearm. The classifier therefore needs to be calibrated for the current electrode placement and recording conditions before it is used to control the hand.
+EMG signals can vary significantly depending on electrode placement, skin contact, signal quality, and the strength of the muscle contraction. Because of this, fixed signal thresholds would not work reliably between different electrode placements or recording sessions. The classifier is therefore calibrated using EMG recorded with the electrodes in their current positions. The calibration recording must contain examples of rest, flexion, and extension.
 
-During calibration, an XDF recording containing flexion, extension, and rest is selected. Three separate intervals of each movement are marked from the recording. The EMG data from both channels is first corrected for baseline drift and then divided into overlapping 100 ms analysis windows. For every window, six features are calculated: MAV, RMS, and waveform length for each of the two EMG channels. These features describe the strength and variation of the muscle activity and are used by the classifier.
+The selected intervals are divided into 100 ms analysis windows with 75% overlap. At a sampling rate of 250 Hz, each window contains approximately 25 samples and the next window begins about 6 samples, or 24 ms, later. Therefore, the classifier does not make a decision from a single EMG sample; every prediction is based on the behaviour of both channels over a short section of the signal.
+
+For every 100 ms analysis window, the program extracts three features from each EMG channel: Mean Absolute Value (MAV), Root Mean Square (RMS), and Waveform Length (WL). Since there are two channels, this produces six values in total. 
+
+* Mean Absolute Value (MAV) is the average of the absolute EMG amplitudes inside the window. It therefore provides a simple measure of the overall amplitude of the signal. Taking the absolute value is important because EMG contains both positive and negative values, which would otherwise partially cancel each other out when averaged.
+* Root Mean Square (RMS) is calculated by squaring each EMG sample, averaging the squared values, and then taking the square root. It is similar to MAV because it also shows the strength of muscle activity, but it is more sensitive to large peaks in the EMG signal.
+* Waveform Length (WL) is calculated by adding together the absolute differences between consecutive EMG samples in the window. It describes how much the signal changes over time. This is useful because it adds information about the shape and variability of the EMG signal, rather than only its amplitude.
+
+The classifier works with three possible states: REST, FLEXION, and EXTENSION. REST means that neither muscle group is intentionally contracting, FLEXION corresponds to closing the hand, and EXTENSION corresponds to opening it. In the final control system, these states are translated into the commands HOLD, CLOSE, and OPEN.
+
+Classification is then performed in two stages. First, an activity gate decides whether the user is resting or actively contracting the muscles. The MAV values from both EMG channels are added together and compared with a threshold found during calibration. If the activity is below the threshold, the signal is classified as REST. If it is above the threshold, it is passed to the second stage, where Linear Discriminant Analysis (LDA) distinguishes between FLEXION and EXTENSION using the six extracted features: MAV, RMS, and WL from both channels. Before training, these features are standardized so that differences in numerical scale do not influence the classifier.
+
+To evaluate the calibration, leave-one-repetition-out cross-validation is used. With three repetitions, two are used for training and the remaining one is used for testing. This is repeated three times so that every repetition is tested once as unseen data. After classification, a 2-out-of-3 voting system reduces the effect of occasional incorrect predictions: at least two of the three most recent predictions must agree on FLEXION or EXTENSION before a CLOSE or OPEN command is produced; otherwise, the command remains HOLD. If the required accuracy is reached, the trained classifier and its calibration parameters are saved in bionic_hand_classifier.mat for use by the real-time control program.
 
 ## Bionic hand mechanical design and operation
 
