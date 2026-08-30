@@ -37,6 +37,7 @@ During calibration, the user selects representative periods of rest, flexion, an
 The classifier works with three possible states: REST, FLEXION, and EXTENSION. REST means that neither muscle group is intentionally contracting, FLEXION corresponds to closing the hand, and EXTENSION corresponds to opening it. In the final control system, these states are translated into the commands HOLD, CLOSE, and OPEN.
 
 Classification is then performed in two stages:
+
 1.   **Activity Gate** decides whether the user is resting or actively contracting the muscles. The MAV values from both EMG channels are added together and compared with a threshold found during calibration. If the activity is below the threshold, the signal is classified as REST. If it is above the threshold, it is passed to the second stage.
 2.   **Linear Discriminant Analysis (LDA)** distinguishes between FLEXION and EXTENSION using the six extracted features: MAV, RMS, and WL from both channels. Before training, these features are standardised so that differences in numerical scale do not influence the classifier.
 
