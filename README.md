@@ -33,7 +33,9 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 <img width="600" height="280" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
 
-## 3D printed bionic hand work mechanism
+## Bionic hand mechanical design and operation
+
+The 3D-printed bionic hand uses a simple tendon-driven mechanism to open and close the fingers. Each finger consists of several 3D-printed segments connected by bolts that act as joints. Pulling strings run through tunnels on the palm side of the fingers and are connected to a spool mounted on the servo motor. When the servo rotates, the strings wind around the spool and pull the fingers closed. Elastic cords on the opposite side provide a passive restoring force and pull the fingers back open when the strings are released. Although my design is not particularly complex or polished, it contains the features needed for the hand to function. The most important features are the over-bending stops on the back of the hand, which prevent the fingers from bending too far in the wrong direction, and the tunnels on both sides of the finger joints, which guide the pulling strings and elastic cords. In the images below, the left image shows the palm side with the servo-driven spool, while the right image shows the back side with the elastic cords. The complete design can also be viewed in the assembly file inside Simple bionic hand CAD model.zip.
 
 <img width="280" height="210" alt="1000054527" src="https://github.com/user-attachments/assets/7ced2d2f-78b6-4478-91eb-ea1fe7070eaf" /> <img width="280" height="210" alt="unnamed (2)" src="https://github.com/user-attachments/assets/e201efde-47b5-4fdd-b94b-dbbe15ca6def" />
 
