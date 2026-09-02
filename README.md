@@ -1,4 +1,10 @@
+# EMG-Controlled Bionic Hand
 
+This project is a simple bionic hand controlled using electromyography (EMG) signals measured from the forearm. Two ExG Pills are used to record the activity of the flexor and extensor muscle groups. The EMG signals are then processed in MATLAB and classified as REST, FLEXION, or EXTENSION. These classifications are used to control a servo motor that opens and closes the 3D-printed hand.
+
+The system is divided into two main stages. First, EMG data is recorded and used to calibrate and train a classifier for the current electrode placement and recording session. After calibration, the saved classifier can be used for real-time control. MATLAB reads the EMG signal from one Arduino, processes and classifies it, and sends movement commands to a second Arduino that controls the servo motor.
+
+This repository contains the MATLAB programs for calibration and real-time control, the bionic hand CAD files, and the information needed to set up the EMG acquisition system and reproduce the project.
 
 ## Required components and downloads
 
