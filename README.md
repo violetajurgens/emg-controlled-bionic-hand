@@ -1,4 +1,4 @@
-https://github.com/user-attachments/assets/6ffbbc6b-d93d-49ef-9635-fee04a6ba1d7
+<video src="https://github.com/user-attachments/assets/6ffbbc6b-d93d-49ef-9635-fee04a6ba1d7" width="500"></video>
 
 # EMG-Controlled Bionic Hand
 
