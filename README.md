@@ -24,7 +24,7 @@ Experimenting with electrode placement can make a major difference. The electrod
 
 <img width="600" height="280" alt="image" src="https://github.com/user-attachments/assets/9fe8f807-8f0c-403c-9350-321dcc48703b" />
 
-## Classifier design, calibration and training
+## Classifier design and calibration
 
 EMG signals can vary significantly depending on electrode placement, skin contact, signal quality, and the strength of the muscle contraction. Because of this, fixed signal thresholds would not work reliably between different electrode placements or recording sessions. Therefore, the classifier is first calibrated and trained using the current EMG session before it is used for real-time hand control.
 
@@ -56,9 +56,21 @@ Each finger consists of several 3D-printed segments connected by bolts that act 
 
 The over-bending stops on the back of the hand prevent the fingers from bending too far in the wrong direction, while the tunnels on both sides of the finger joints guide the actuation strings and elastic cords. In the images above, the leftmost image shows the palm side with the servo-driven spool, while the rightmost image shows the back side with the elastic cords. The complete design can be viewed in the SolidWorks assembly file inside Simple bionic hand model.zip. The hole in the palm section that holds the servo can be modified to fit the dimensions of a different servo. 
 
-## Control of the servo
+## Real-time hand control
 
-Servo was controlled through MatLab using MATLAB Support for Arduino hardware package with Servo library enabled.
+Before running the program, make sure that the correct COM ports are selected. In this project, the Arduino Nano is used for collecting the EMG signal and the Arduino Uno is used for controlling the servo. These boards must use different COM ports. The COM-port numbers can change when the boards are disconnected or connected to a different USB port. If you are unsure which port belongs to which board, unplug one board and check which COM port disappears. It is especially important not to swap the two COM ports. If MATLAB attempts to connect to the Nano using the Arduino Support Package, it may upload its own server firmware to the board and overwrite the Chords firmware. In this case, the Chords firmware must be uploaded to the Nano again before EMG acquisition will work.
 
-**References**
-Simar, C., Colot, M., Cebolla, A.-M., Petieau, M., Cheron, G., and Bontempi, G. (2024). Machine learning for hand pose classification from phasic and tonic EMG signals during bimanual activities in virtual reality. Front. Neurosci. 18:1329411. doi: 10.3389/fnins.2024.1329411
+The program is written for an Arduino Nano Classic, which sends eight analog channels through the Chords firmware. If a different board or firmware configuration is used, numChannels and possibly the baud rate must also be changed. The servo signal wire is connected to pin D9 of the Arduino Uno, if another pin is used, this must be changed in the program. The opening and closing positions also have to be determined experimentally for each hand mechanism. MATLAB controls the servo using values between 0 and 1, where the complete servo range corresponds approximately to 180 degrees. It is useful to determine the servo movement limits in a separate test program before running the full real-time control system. This makes it easier to find safe OPEN and CLOSE positions without involving the EMG classifier, and helps prevent the servo from pulling the hand mechanism too far.
+
+The incoming EMG signal is processed in the same way as during calibration. A running median is used to remove the changing baseline, and the corrected samples are placed into the same analysis-window size that was used for training. The same six features are then calculated in the same order, that shouldn't be changed after calibration. If the window size, overlap, baseline removal, feature order, or electrode setup is changed significantly, it is better to repeat the calibration so that the classifier matches the new signal conditions. The activity gate first determines whether the signal represents REST or active muscle contraction. Active windows are standardized using the mean and standard deviation saved during calibration and are then classified as FLEXION or EXTENSION by the trained LDA model. The 2-out-of-3 voting system is then applied. FLEXION produces a CLOSE command, EXTENSION produces an OPEN command, and when neither movement receives enough votes the command is HOLD. During HOLD, no new servo position is sent.
+
+If the hand starts behaving unpredictably, the EMG signal should be checked before changing the classifier. Poor electrode contact, incorrect electrode placement, cable movement, or electrical interference can cause large peaks or make one channel much stronger than the other. In this project, strong electrical interference was observed when the system was placed too close to the computer or to cables connected to it. In these cases the classifier may be receiving a completely useless signal. 
+
+The hand will not move immediately when a muscle contraction begins. The program first needs enough samples to fill an analysis window, calculate the features, classify the signal, and obtain enough agreeing predictions for the 2-out-of-3 voting system. Therefore, there will be a short delay before an OPEN or CLOSE command is produced. Some additional delay also comes from sending the control command from MATLAB through the Arduino to the servo. After the command is received, the physical servo still needs time to rotate and move the hand mechanism. If the hand responds much slower than expected, it is useful to check whether the classifier is producing stable FLEXION or EXTENSION predictions or whether it is repeatedly switching between movement and REST.
+
+The EMG acquisition board can occasionally lose its serial connection or temporarily stop transmitting data. Because of this, the program contains a reconnection function. If the connection is lost, MATLAB clears the old serial connection, checks whether the EMG COM port becomes available again, creates a new connection, and sends the Chords START command to restart EMG acquisition. The previous EMG buffers and voting history are also cleared so that samples recorded before and after the interruption are not mixed together. If reconnection happens repeatedly, however, this usually indicates another problem.
+
+
+**Reference**
+
+Simar, C., Colot, M., Cebolla, A.-M., Petieau, M., Cheron, G., & Bontempi, G. (2024). Machine learning for hand pose classification from phasic and tonic EMG signals during bimanual activities in virtual reality. *Frontiers in Neuroscience, 18*, 1329411. https://doi.org/10.3389/fnins.2024.1329411
